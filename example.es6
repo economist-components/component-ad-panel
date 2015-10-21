@@ -1,26 +1,9 @@
 import React from 'react';
 import AdPanel from './index';
-// ((run) => {
-//   if (!run) {
-//     return;
-//   }
-//   window.googletag = window.googletag || {};
-//   window.googletag.cmd = window.googletag.cmd || [];
-//   (function createScript() {
-//     const gads = document.createElement('script');
-//     gads.async = true;
-//     gads.type = 'text/javascript';
-//     const useSSL = 'https:' === document.location.protocol;
-//     gads.src = (useSSL ? 'https:' : 'http:') +
-//     '//www.googletagservices.com/tag/js/gpt.js';
-//     const node = document.getElementsByTagName('script')[0];
-//     node.parentNode.insertBefore(gads, node);
-//   })();
-// })(typeof window !== 'undefined');
 
 export default (
   <div>
-      <div>
+    <div>
       <p>Lorem ipsum dolor sit amet, sit quod odio intellegebat no. Causae labitur sadipscing ne eos, vis tota eirmod
       debitis ex. Sit ubique nominavi erroribus in, stet lorem tation ea pri. Ut movet gubergren est, quo euismod
       scriptorem eu. Ex his dicit virtute, sed aliquam reprehendunt cu.</p>
@@ -104,9 +87,9 @@ export default (
 
       <p>No cum omnis epicurei, an elitr ludus qualisque cum. Ludus alienum iudicabit id qui. Convenire incorrupte
        reprehendunt id eum. Solum clita quo id. Nisl sale inimicus ea sea, per quem timeam tamquam ad. blah</p>
-      </div>
-      <AdPanel adTag="/5605/teg.fmsq/wdif/busi" sizes={[[300, 250]]} reserveHeight={250} />
-      <div>
+    </div>
+    <AdPanel adTag="/5605/teg.fmsq/wdif/busi" sizes={[ [ 300, 250 ] ]} reserveHeight={250} />
+    <div>
       <p>Lorem ipsum dolor sit amet, sit quod odio intellegebat no. Causae labitur sadipscing ne eos, vis tota eirmod
        debitis ex. Sit ubique nominavi erroribus in, stet lorem tation ea pri. Ut movet gubergren est, quo euismod
         scriptorem eu. Ex his dicit virtute, sed aliquam reprehendunt cu.</p>
@@ -156,6 +139,6 @@ export default (
       <p>No vix vivendo sadipscing, ornatus minimum postulant cu mel. Liber efficiendi dissentias ei nec, quo no summo
        euismod. Iudicabit similique pri ne, nam ex sint dicunt. Utinam ancillae eam et, pri tota quas consequuntur no.
       Est ne quod prima ancillae.</p>
-      </div>
-      </div>
+    </div>
+  </div>
 );

@@ -23,7 +23,7 @@ export default class AdPanel extends React.Component {
       lazyLoadMargin: 350,
       sizes: [ [ 60, 60 ], [ 70, 70 ], [ 300, 250 ], [ 1024, 768 ] ],
       styled: true,
-    }
+    };
   }
 
   constructor(...args) {
@@ -47,8 +47,8 @@ export default class AdPanel extends React.Component {
         const gads = document.createElement('script');
         gads.async = true;
         gads.type = 'text/javascript';
-        const useSSL = 'https:' === window.location.protocol;
-        gads.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
+        const useSsl = window.location.protocol === 'https:';
+        gads.src = `${useSsl ? 'https:' : 'http:'}//www.googletagservices.com/tag/js/gpt.js`;
         document.head.appendChild(gads);
       }
     }
@@ -92,7 +92,7 @@ export default class AdPanel extends React.Component {
   }
 
   generateAd() {
-    this.setState({ adGenerated: true })
+    this.setState({ adGenerated: true });
     if ((window.googletag) && (this.props.adTag)) {
       const googleTag = window.googletag;
       googleTag.cmd.push(() => {
@@ -107,7 +107,7 @@ export default class AdPanel extends React.Component {
           .setTargeting('resp_mpu_inline_ad', 'refresh')
           .addService(googleTag.pubads());
         if (this.props.sizes && this.props.sizes.length > 1) {
-          slot.defineSizeMapping(mappingAd)
+          slot.defineSizeMapping(mappingAd);
         }
         googleTag.pubads().enableSingleRequest();
         googleTag.enableServices();
@@ -116,6 +116,7 @@ export default class AdPanel extends React.Component {
     } else {
       const adToHide = React.findDOMNode(this.refs.container);
       adToHide.style.display = 'none';
+      /* eslint-disable no-console */
       if (typeof console !== 'undefined' && console.error) {
         console.error('window.googletag not present, please put googletag js into html');
       }
@@ -123,21 +124,22 @@ export default class AdPanel extends React.Component {
   }
 
   render() {
-    let tag;
+    let tag = [];
     if (this.state && this.state.tagId) {
-      const adStyle = {
-        minHeight: this.props.reserveHeight || undefined
-      };
+      let adStyle = {};
+      if (this.props.reserveHeight) {
+        adStyle = { minHeight: this.props.reserveHeight };
+      }
       tag = (<div className="ad-panel__googlead" id={this.state.tagId} style={adStyle}></div>);
     }
-    let rootClassNames = ['ad-panel__container'];
-    let title;
+    let rootClassNames = [ 'ad-panel__container' ];
+    let title = [];
     if (this.props.styled) {
-      rootClassNames.push('ad-panel__container--styled');
-      title = (<span ref="title" className="ad-panel__title">Advertisement</span>)
+      rootClassNames = rootClassNames.concat([ 'ad-panel__container--styled' ]);
+      title = (<span ref="title" className="ad-panel__title">Advertisement</span>);
     }
     if (this.props.animated) {
-      rootClassNames.push('ad-panel__animated');
+      rootClassNames = rootClassNames.concat([ 'ad-panel__animated' ]);
     }
     const aria = {
       role: 'complementary',
