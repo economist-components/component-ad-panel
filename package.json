@@ -121,7 +121,7 @@
     "chai-enzyme": "^0.4.1",
     "chai-spies": "^0.7.1",
     "enzyme": "^2.2.0",
-    "react-addons-test-utils": "^0.14.8",
+    "react-addons-test-utils": "^15.0.0",
     "eslint": "^2.7.0",
     "eslint-config-strict": "^8.5.1",
     "eslint-config-strict-react": "^8.0.1",
