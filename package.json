@@ -113,7 +113,7 @@
     "@economist/doc-pack": "^1.0.7",
     "@economist/provision-react-component": "1.7.4",
     "babel": "^5.8.34",
-    "babel-polyfill": "^6.8.0",
+    "babel-polyfill": "^6.9.0",
     "babelify": "^6.4.0",
     "browserify": "^13.0.0",
     "browserify-istanbul": "^1.0.0",
