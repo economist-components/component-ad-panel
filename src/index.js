@@ -7,6 +7,48 @@ function uniqueId() {
   return (Math.random() * mathRandomToIntMultiplier).toString(hex);
 }
 
+let adPanelConfig = {};
+const adDivs = [];
+// NOTE: Refresh way - not working atm
+// let adSlots = [];
+
+function getOrCreateGoogleTag() {
+  /* global window: false */
+  if (typeof window === 'undefined' || typeof window.document === 'undefined') {
+    return null;
+  }
+  if (window.googletag) {
+    return window.googletag;
+  }
+  window.googletag = { cmd: [] };
+  const gads = document.createElement('script');
+  gads.async = true;
+  gads.type = 'text/javascript';
+  const useSsl = window.location.protocol === 'https:';
+  gads.src = `${ useSsl ? 'https:' : 'http:' }//www.googletagservices.com/tag/js/gpt.js`;
+  window.document.head.appendChild(gads);
+  return window.googletag;
+}
+
+function displayAdsFn(googleTag) {
+  if (!adDivs.length) {
+    return;
+  }
+
+  googleTag.enableServices();
+
+  adDivs.forEach((div) => {
+    googleTag.display(div);
+  });
+
+  // Clean up
+  adDivs.length = 0;
+
+  // Refresh way - Not working ATM
+  // const pubAds = googleTag.pubads();
+  // pubAds.refresh(adSlots);
+}
+
 /* global window: false */
 /* global document: false */
 export default class AdPanel extends React.Component {
@@ -41,6 +83,47 @@ export default class AdPanel extends React.Component {
     };
   }
 
+  static config(options) {
+    const googleTag = getOrCreateGoogleTag();
+    adPanelConfig = options;
+
+    googleTag.cmd.push(() => {
+      const pubAds = googleTag.pubads();
+      const targeting = adPanelConfig.targeting;
+      // Set targeting
+      pubAds.setTargeting('subs', targeting.subscriber);
+
+      if (targeting.etear) {
+        pubAds.setTargeting('etear', targeting.etear);
+      }
+
+      if (adPanelConfig.sra) {
+        // enables Single Request Architecture (SRA)
+        pubAds.enableSingleRequest();
+      }
+
+      // NOTE: Refresh way - not working atm
+      // Disable initial load, we will use refresh() to fetch ads.
+      // Calling this function means that display() calls just
+      // register the slot as ready, but do not fetch ads for it.
+      // pubAds.disableInitialLoad();
+
+      // Collapses empty div elements on a page when there is no ad content to display.
+      pubAds.collapseEmptyDivs();
+    });
+  }
+
+  static displayAds() {
+    const googleTag = getOrCreateGoogleTag();
+    if (typeof googleTag.display === 'function') {
+      displayAdsFn(googleTag);
+    } else {
+      googleTag.cmd.push(() => {
+        displayAdsFn(googleTag);
+      });
+    }
+  }
+
   constructor(...args) {
     super(...args);
     this.loadElementWhenInView = this.loadElementWhenInView.bind(this);
@@ -72,21 +155,7 @@ export default class AdPanel extends React.Component {
   }
 
   getOrCreateGoogleTag() {
-    /* global window: false */
-    if (typeof window === 'undefined' || typeof window.document === 'undefined') {
-      return null;
-    }
-    if (window.googletag) {
-      return window.googletag;
-    }
-    window.googletag = { cmd: [] };
-    const gads = document.createElement('script');
-    gads.async = true;
-    gads.type = 'text/javascript';
-    const useSsl = window.location.protocol === 'https:';
-    gads.src = `${ useSsl ? 'https:' : 'http:' }//www.googletagservices.com/tag/js/gpt.js`;
-    window.document.head.appendChild(gads);
-    return window.googletag;
+    return getOrCreateGoogleTag();
   }
 
   isElementInViewport(elm, margin = 0) {
@@ -184,10 +253,17 @@ export default class AdPanel extends React.Component {
         this.adSlot.setTargeting(key, value);
       }
       const pubAds = googleTag.pubads();
-      pubAds.enableSingleRequest();
-      pubAds.collapseEmptyDivs();
-      googleTag.enableServices();
-      googleTag.display(this.state.tagId);
+      if (adPanelConfig.sra) {
+        adDivs.push(tagId);
+      } else {
+        googleTag.enableServices();
+        googleTag.display(tagId);
+      }
+
+      // Refresh way - NOT working atm
+      // adSlots.push(this.adSlot);
+      // googleTag.display(tagId);
+
       this.listenToSlotRenderEnded({ googleTag });
       if (this.props.onImpressionViewable) {
         pubAds.addEventListener('impressionViewable', this.props.onImpressionViewable);
