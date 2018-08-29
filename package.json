@@ -102,7 +102,7 @@
   },
   "dependencies": {
     "@economist/component-palette": "^1.11.0",
-    "@economist/component-typography": "^3.5.0"
+    "@economist/component-typography": "^4.2.2"
   },
   "peerDependencies": {
     "react": "^0.14.8||^15.0.0||^16.0.0"
