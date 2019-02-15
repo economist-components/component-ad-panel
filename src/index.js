@@ -308,7 +308,6 @@ export default class AdPanel extends React.Component {
       rootClassNames = rootClassNames.concat([ this.props.className ]);
     }
     const props = {
-      ref: 'container',
       className: rootClassNames.join(' '),
     };
     const aria = {
